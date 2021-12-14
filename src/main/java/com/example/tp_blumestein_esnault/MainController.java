@@ -1,5 +1,6 @@
 package com.example.tp_blumestein_esnault;
 
+import com.example.tp_blumestein_esnault.donnees.Reservation;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

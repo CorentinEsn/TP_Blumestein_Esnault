@@ -31,7 +31,7 @@
             </Menu>
         </menus>
       </MenuBar>
-      <TableView maxWidth="600.0" prefHeight="442.0" prefWidth="600.0">
+      <TableView fx:id="calendrierReservations" maxWidth="600.0" prefHeight="442.0" prefWidth="600.0">
         <columns>
             <TableColumn prefWidth="75.0" sortable="false" text="Heures" />
           <TableColumn prefWidth="75.0" sortable="false" text="Lundi" />

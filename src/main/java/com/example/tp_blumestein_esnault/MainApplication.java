@@ -18,7 +18,7 @@ public class MainApplication extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -29,6 +29,9 @@ public class MainApplication extends Application {
         Bdd.initConnection();
 
         launch();
+        Model mod=new Model(Bdd.conn);
+        mod.delUser(1);
+
 
         Bdd.closeConnection();
     }

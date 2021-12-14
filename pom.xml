@@ -61,7 +61,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                com.example.tp_blumestein_esnault/com.example.tp_blumestein_esnault.HelloApplication
+                                com.example.tp_blumestein_esnault/com.example.tp_blumestein_esnault.MainApplication
                             </mainClass>
                         </configuration>
                     </execution>

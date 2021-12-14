@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <MenuBar VBox.vgrow="NEVER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Connexion">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Login" />
+                  <MenuItem mnemonicParsing="false" text="Register" />
+                  <MenuItem mnemonicParsing="false" text="Disconnect" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <TableView fx:id="calendrierReservations" maxWidth="600.0" prefHeight="442.0" prefWidth="600.0">
+        <columns>
+            <TableColumn prefWidth="75.0" sortable="false" text="Heures" />
+          <TableColumn prefWidth="75.0" sortable="false" text="Lundi" />
+          <TableColumn prefWidth="75.0" sortable="false" text="Mardi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Mercredi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Jeudi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Vendredi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Samedi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Dimanche" />
+        </columns>
+      </TableView>
+      <ButtonBar maxHeight="78.0" prefHeight="78.0" prefWidth="530.0" snapToPixel="false" VBox.vgrow="NEVER">
+        <buttons>
+            <Button fx:id="reserverButton" mnemonicParsing="false" text="Réserver" />
+            <Button fx:id="userReservationsButton" mnemonicParsing="false" text="Mes réservations" />
+        </buttons>
+      </ButtonBar>
+   </children>
+</VBox>

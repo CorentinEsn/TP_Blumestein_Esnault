@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class InscriptionApplication extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("inscription-view.fxml"));

@@ -208,6 +208,7 @@ public interface Model {
             e.printStackTrace();
         }
     }
+
     public static void delreservation(Reservation reservation) throws SQLException {
 
         String query = "DELETE FROM reservation WHERE idReservation=(?) ;";

@@ -16,11 +16,11 @@ public class Utilisateur {
         Prenom_Utilisateur=prenom;
     }
 
-    public int getId_Salle() {
+    public int getId_Utilisateur() {
         return Id_Utilisateur;
     }
 
-    public void setId_Salle(int id_Salle) {
+    public void setId_Utilisateur(int id_Salle) {
         Id_Utilisateur = id_Salle;
     }
 

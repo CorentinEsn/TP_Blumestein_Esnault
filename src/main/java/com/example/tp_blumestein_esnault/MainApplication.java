@@ -1,5 +1,9 @@
 package com.example.tp_blumestein_esnault;
 
+import com.example.tp_blumestein_esnault.donnees.Reservations;
+import com.example.tp_blumestein_esnault.donnees.Salle;
+import com.example.tp_blumestein_esnault.donnees.Salles;
+import com.example.tp_blumestein_esnault.donnees.Utilisateurs;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,10 +31,9 @@ public class MainApplication extends Application {
         }
 
         Bdd.initConnection();
-
         launch();
-        Model mod=new Model(Bdd.conn);
-        mod.delUser(1);
+
+
 
 
         Bdd.closeConnection();

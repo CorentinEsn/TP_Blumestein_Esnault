@@ -22,6 +22,10 @@ public class Utilisateur {
         this.current=false;
     }
 
+    public Utilisateur() {
+
+    }
+
     public int getId_Utilisateur() {
         return Id_Utilisateur;
     }

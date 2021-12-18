@@ -27,6 +27,7 @@ import java.util.HashMap;
 
 import javafx.scene.control.Button;
 import javafx.util.converter.LocalDateTimeStringConverter;
+import javafx.util.converter.LocalTimeStringConverter;
 
 public class MainController {
 
@@ -45,11 +46,11 @@ public class MainController {
     @FXML
     public ArrayList<MenuItem> sallesItems=new ArrayList<>();
 
-    private LocalDateTime currentDebut_Reservation;
-    private LocalDateTime currentFin_Reservation;
-    private LocalDate currentJour;
-    private LocalTime currentHeureDebut;
-    private LocalTime currentHeureFin;
+    private LocalDateTime currentDebut_Reservation=LocalDateTime.now();
+    private LocalDateTime currentFin_Reservation=LocalDateTime.now();
+    private LocalDate currentJour=LocalDate.now();
+    private LocalTime currentHeureDebut=LocalTime.now();
+    private LocalTime currentHeureFin=LocalTime.now();
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
     public Salles salles=Model.salles;
@@ -85,7 +86,14 @@ public class MainController {
     }
 
     public void initializeText() {
-        textZone.getChildren().add(new Text("Ici apparaîssent les réservations"));
+        textZone.getChildren().add(new Text("Ici apparaîssent les réservations\n"));
+        for (int i=1;i<Model.reservations.getReservations().size()+1;i++){
+            textZone.getChildren().add(new Text("Salle : "+Model.reservations.getReservations().get(i).getSalle().getNom_Salle()+
+            "\n Heure de début : "+Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                    +"\n Heure de fin : "+Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+            +"\n Réservée par : "+Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur()+" "
+                    +Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur()+"\n\n\n"));
+        }
     }
 
     public void initializeSalles() throws SQLException {
@@ -118,43 +126,70 @@ public class MainController {
 
     public void addReservation(ActionEvent actionEvent) throws SQLException {
         currentJour = datePicker.getValue();
-        currentDebut_Reservation.of(currentJour, currentHeureDebut);
-        currentDebut_Reservation.of(currentJour, currentHeureFin);
+    System.out.println(currentHeureDebut);
+        currentDebut_Reservation=LocalDateTime.of(currentJour, currentHeureDebut);
+        currentFin_Reservation=LocalDateTime.of(currentJour, currentHeureFin);
+        for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++){
+            if (Model.utilisateurs.getUtilisateurs().get(i).isCurrent()){
+                currentUtilisateur=Model.utilisateurs.getUtilisateurs().get(i);
+            }
+        }
         Reservation toAddReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
+        System.out.println(currentUtilisateur.getId_Utilisateur());
+        System.out.println(currentUtilisateur.getNom_Utilisateur());
         Model.addReservation(toAddReservation);
-        reservations.addReservation(toAddReservation);
     }
 
     public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
+        for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++) {
+            if (Model.utilisateurs.getUtilisateurs().get(i).isCurrent()) {
+                currentUtilisateur = Model.utilisateurs.getUtilisateurs().get(i);
+            }
+        }
         Model.getReservationByUser(currentUtilisateur);
     }
-
-    public void setCurHour(ActionEvent actionEvent) {
+    public void setCurHour1(ActionEvent actionEvent){
+        setCurHour(1);
+    }
+    public void setCurHour2(ActionEvent actionEvent){
+        setCurHour(2);
+    }
+    public void setCurHour3(ActionEvent actionEvent){
+        setCurHour(3);
+    }
+    public void setCurHour4(ActionEvent actionEvent){
+        setCurHour(4);
+    }
+    public void setCurHour(int i) {
         //heureButton.setText(actionEvent.getTarget().getClass().getText());
-        String creneau = heureButton.getText();
-        switch (creneau){
-            case "8h15-10h15" :
-                currentHeureDebut.of(8, 15);
-                currentHeureFin.of(10, 15);
+        switch (i){
+            case 1 :
+                currentHeureDebut=LocalTime.of(8, 15);
+            System.out.println(currentHeureDebut);
+                currentHeureFin=LocalTime.of(10, 15);
                 textZone.getChildren().add(new Text("Créneau sélectionné : 8h15-10h15"));
-
-            case "10h30-12h30" :
-                currentHeureDebut.of(10, 30);
-                currentHeureFin.of(12, 30);
+                heureButton.setText("8h15-10h15");
+                break;
+            case 2 :
+                currentHeureDebut=LocalTime.of(10, 30);
+                currentHeureFin=LocalTime.of(12, 30);
                 textZone.getChildren().add(new Text("Créneau sélectionné : 10h30-12h30"));
+                heureButton.setText("10h30-12h30");
+                break;
 
-
-            case "14h00-16h00" :
-                currentHeureDebut.of(14, 0);
-                currentHeureFin.of( 16, 0);
+            case 3 :
+                currentHeureDebut=LocalTime.of(14, 0);
+                currentHeureFin=LocalTime.of( 16, 0);
                 textZone.getChildren().add(new Text("Créneau sélectionné : 14h00-16h00"));
+                heureButton.setText("14h00-16h00");
+                break;
 
-
-            case "16h15-18h15" :
-                currentHeureDebut.of(16, 15);
-                currentHeureFin.of( 18, 15);
+            case 4 :
+                currentHeureDebut=LocalTime.of(16, 15);
+                currentHeureFin=LocalTime.of( 18, 15);
                 textZone.getChildren().add(new Text("Créneau sélectionné : 16h15-18h15"));
-
+                heureButton.setText("16h15-18h15");
+                break;
         }
     }
 }

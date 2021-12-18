@@ -32,7 +32,7 @@ public interface Model {
 
     }
 
-    public static void getUser(int id) throws SQLException {
+    public static Utilisateur getUser(int id) throws SQLException {
 
         Statement s;
         String query = "SELECT Nom,Prenom,Password FROM utilisateur WHERE idUtilisateur=?";
@@ -42,12 +42,12 @@ public interface Model {
         PreparedStatement stmt = conn.prepareStatement(query);
 
             stmt.setInt(1, id);
-
+        Utilisateur u=null;
             ResultSet rs = stmt.executeQuery();
             while(rs.next()) {
-                Utilisateur u = new Utilisateur(id, rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
+                u = new Utilisateur(id, rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
             }
-
+        return u;
     }
 
     public static void updateUser(int id,String nom,String prenom,String password) {
@@ -118,7 +118,7 @@ public interface Model {
 
     }
 
-    public static void getSalle(int id) throws SQLException {
+    public static Salle getSalle(int id) throws SQLException {
 
         String query = "SELECT Nom_Salle FROM salle WHERE idSalle=?";
 
@@ -127,12 +127,12 @@ public interface Model {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setInt(1, id);
-
+        Salle salle=null;
         ResultSet rs = stmt.executeQuery();
         while(rs.next()) {
-            Salle salle = new Salle(id, rs.getString("Nom_Salle"));
+             salle = new Salle(id, rs.getString("Nom_Salle"));
         }
-
+return salle;
     }
     public static void getAllSalle() throws SQLException {
 
@@ -205,7 +205,7 @@ public interface Model {
 
     }
 
-    public static void getReservationByID(int id) throws SQLException {
+    public static Reservation getReservationByID(int id) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE idReservation=?";
 
@@ -214,14 +214,14 @@ public interface Model {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setInt(1, id);
-
+        Reservation reservation=null;
         ResultSet rs = stmt.executeQuery();
         while(rs.next()) {
-            Reservation reservation= new Reservation(id, rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+            reservation= new Reservation(id, rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
         }
-
+return reservation;
     }
-    public static void getReservationByUser(Utilisateur utilisateur) throws SQLException {
+    public static Reservation getReservationByUser(Utilisateur utilisateur) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE Id_Utilisateur=?";
 
@@ -230,15 +230,15 @@ public interface Model {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setInt(1, utilisateur.getId_Utilisateur());
-
+        Reservation reservation=null;
         ResultSet rs = stmt.executeQuery();
         while(rs.next()) {
-            Reservation reservation= new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+            reservation= new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
         }
-
+return reservation;
     }
 
-    public static void getReservationBySalle(Salle salle) throws SQLException {
+    public static Reservation getReservationBySalle(Salle salle) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE id_Salle=?";
 
@@ -247,11 +247,12 @@ public interface Model {
         PreparedStatement stmt = conn.prepareStatement(query);
 
         stmt.setInt(1, salle.getId_Salle());
-
+        Reservation reservation=null;
         ResultSet rs = stmt.executeQuery();
         while (rs.next()) {
-            Reservation reservation = new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(), salles.getSalles().get(rs.getInt("Id_Utilisateur")), utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+            reservation = new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(), salles.getSalles().get(rs.getInt("Id_Utilisateur")), utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
         }
+        return reservation;
     }
 
 

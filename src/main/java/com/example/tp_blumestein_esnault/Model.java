@@ -103,7 +103,7 @@ public interface Model {
 
     public static void addSalle(Salle salle) throws SQLException{
 
-        String getIdMax = "SELECT MAX(idSalle) FROM salle ";
+        String getIdMax = "SELECT MAX(idSalle) FROM salle";
         PreparedStatement stmt=conn.prepareStatement(getIdMax);
 
         ResultSet resultMax=stmt.executeQuery();

@@ -41,7 +41,8 @@ public class MainController {
     private LocalDateTime currentFin_Reservation;
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
-    private Salles salles;
+    public Salles salles;
+    public Reservations reservations;
 
     @FXML
     public void login() throws IOException {
@@ -54,7 +55,7 @@ public class MainController {
         new AddSalleApplication().start(new Stage());
     }
 
-    public void addSalleSelection(String salleName){
+    public void addSalleSelection(String salleName) throws SQLException {
         MenuButton salleButton = new MenuButton();
         Model.addSalle(new Salle(salleName));
         salleButton.getItems().addAll(new MenuItem(salleName));
@@ -75,9 +76,31 @@ public class MainController {
             Salle salleToAdd = Model.getSalle(i);
 
             //initialize hashmap
+            salles = new Salles();
             salles.addSalle(salleToAdd);
             //initialize salle selection button
             salleButton.getItems().add(new MenuItem(salleToAdd.getNom_Salle()));
         }
     }
+
+    /*public void setCurSalle(ActionEvent actionEvent) {
+        for (int i=0; i < salles.getSalles().size();i++){ //go through the hashmap
+            if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
+                currentSalle = salles.getSalles().get(i);
+            }
+        }
+
+    }*/
+
+    /*public void addReservation(ActionEvent actionEvent) {
+        Reservation toAddReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
+        Model.addReservation(toAddReservation);
+        reservations.addReservation(toAddReservation);
+    }*/
+
+    /*public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
+        Model.getReservation(currentUtilisateur);
+    }*/
+
+    //public void setCurHour(ActionEvent actionEvent) {}
 }

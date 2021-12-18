@@ -18,10 +18,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.io.Serial;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
 
 import javafx.scene.control.Button;
+import javafx.util.converter.LocalDateTimeStringConverter;
 
 public class MainController {
 
@@ -40,6 +43,9 @@ public class MainController {
 
     private LocalDateTime currentDebut_Reservation;
     private LocalDateTime currentFin_Reservation;
+    private LocalDate currentJour;
+    private LocalTime currentHeureDebut;
+    private LocalTime currentHeureFin;
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
     public Salles salles=Model.salles;
@@ -71,34 +77,60 @@ public class MainController {
     }
 
     public void initializeSalles() throws SQLException {
-        //initialize hashmap
-
-            //initialize hashmap
             //initialize salle selection button
         for (int i =1; i< salles.getSalles().size()+1;i++){
             salleButton.getItems().add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
 
     }
+}
 
-    /*public void setCurSalle(ActionEvent actionEvent) {
+    public void setCurSalle(ActionEvent actionEvent) {
         for (int i=0; i < salles.getSalles().size();i++){ //go through the hashmap
             if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
                 currentSalle = salles.getSalles().get(i);
+                textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()));
             }
         }
+    }
 
-    }*/
-
-    /*public void addReservation(ActionEvent actionEvent) {
+    public void addReservation(ActionEvent actionEvent) throws SQLException {
+        currentJour = datePicker.getValue();
+        currentDebut_Reservation.of(currentJour, currentHeureDebut);
+        currentDebut_Reservation.of(currentJour, currentHeureFin);
         Reservation toAddReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
         Model.addReservation(toAddReservation);
         reservations.addReservation(toAddReservation);
-    }*/
+    }
 
-    /*public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
+    public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
         Model.getReservation(currentUtilisateur);
-    }*/
+    }
 
-    //public void setCurHour(ActionEvent actionEvent) {}
-}
+    public void setCurHour(ActionEvent actionEvent) {
+        String creneau = heureButton.getText();
+        switch (creneau){
+            case "8h15-10h15" :
+                currentHeureDebut.of(8, 15);
+                currentHeureFin.of(10, 15);
+                textZone.getChildren().add(new Text("Créneau sélectionné : 8h15-10h15"));
+
+            case "10h30-12h30" :
+                currentHeureDebut.of(10, 30);
+                currentHeureFin.of(12, 30);
+                textZone.getChildren().add(new Text("Créneau sélectionné : 10h30-12h30"));
+
+
+            case "14h00-16h00" :
+                currentHeureDebut.of(14, 0);
+                currentHeureFin.of( 16, 0);
+                textZone.getChildren().add(new Text("Créneau sélectionné : 14h00-16h00"));
+
+
+            case "16h15-18h15" :
+                currentHeureDebut.of(16, 15);
+                currentHeureFin.of( 18, 15);
+                textZone.getChildren().add(new Text("Créneau sélectionné : 16h15-18h15"));
+
+        }
+    }
 }

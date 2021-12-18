@@ -84,25 +84,26 @@ public class MainController {
             //initialize salle selection button
         int i;
         for (i=1; i< salles.getSalles().size()+1;i++){
-            System.out.println(i);
             sallesItems.add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
             salleButton.getItems().add(sallesItems.get(i-1));
             int finalI = i;
             sallesItems.get(i-1).setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    salleButton.setText(sallesItems.get(finalI).getText());
+                    salleButton.setText(sallesItems.get(finalI-1).getText());
+                    setCurSalle(event);
                 }
             });
+
         }
     }
 
 
     public void setCurSalle(ActionEvent actionEvent) {
-
-        for (int i=0; i < salles.getSalles().size();i++){ //go through the hashmap
+        for (int i=1; i < salles.getSalles().size()+1;i++){ //go through the hashmap
             if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
                 currentSalle = salles.getSalles().get(i);
+
                 textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()));
             }
         }

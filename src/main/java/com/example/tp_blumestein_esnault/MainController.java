@@ -113,20 +113,19 @@ public class MainController {
         }
     }
 
-
     public void setCurSalle(ActionEvent actionEvent) {
         for (int i=1; i < salles.getSalles().size()+1;i++){ //go through the hashmap
             if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
                 currentSalle = salles.getSalles().get(i);
 
-                textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()));
+                textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()+"\n"));
             }
         }
     }
 
     public void addReservation(ActionEvent actionEvent) throws SQLException {
         currentJour = datePicker.getValue();
-    System.out.println(currentHeureDebut);
+    //System.out.println(currentHeureDebut);
         currentDebut_Reservation=LocalDateTime.of(currentJour, currentHeureDebut);
         currentFin_Reservation=LocalDateTime.of(currentJour, currentHeureFin);
         for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++){
@@ -135,8 +134,9 @@ public class MainController {
             }
         }
         Reservation toAddReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
-        System.out.println(currentUtilisateur.getId_Utilisateur());
-        System.out.println(currentUtilisateur.getNom_Utilisateur());
+        //System.out.println(currentUtilisateur.getId_Utilisateur());
+        //System.out.println(currentUtilisateur.getNom_Utilisateur());
+        reservations.addReservation(toAddReservation);
         Model.addReservation(toAddReservation);
     }
 
@@ -167,29 +167,49 @@ public class MainController {
                 currentHeureDebut=LocalTime.of(8, 15);
             System.out.println(currentHeureDebut);
                 currentHeureFin=LocalTime.of(10, 15);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 8h15-10h15"));
+                textZone.getChildren().add(new Text("Créneau sélectionné : 8h15-10h15\n"));
                 heureButton.setText("8h15-10h15");
                 break;
             case 2 :
                 currentHeureDebut=LocalTime.of(10, 30);
                 currentHeureFin=LocalTime.of(12, 30);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 10h30-12h30"));
+                textZone.getChildren().add(new Text("Créneau sélectionné : 10h30-12h30\n"));
                 heureButton.setText("10h30-12h30");
                 break;
 
             case 3 :
                 currentHeureDebut=LocalTime.of(14, 0);
                 currentHeureFin=LocalTime.of( 16, 0);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 14h00-16h00"));
+                textZone.getChildren().add(new Text("Créneau sélectionné : 14h00-16h00\n"));
                 heureButton.setText("14h00-16h00");
                 break;
 
             case 4 :
                 currentHeureDebut=LocalTime.of(16, 15);
                 currentHeureFin=LocalTime.of( 18, 15);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 16h15-18h15"));
+                textZone.getChildren().add(new Text("Créneau sélectionné : 16h15-18h15\n"));
                 heureButton.setText("16h15-18h15");
                 break;
+        }
+    }
+
+    public void supprReservation(ActionEvent actionEvent) throws SQLException {
+        //get all needed values to create a reservation to delete
+        currentJour = datePicker.getValue();
+        currentDebut_Reservation=LocalDateTime.of(currentJour, currentHeureDebut);
+        currentFin_Reservation=LocalDateTime.of(currentJour, currentHeureFin);
+        for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++){
+            if (Model.utilisateurs.getUtilisateurs().get(i).isCurrent()){
+                currentUtilisateur=Model.utilisateurs.getUtilisateurs().get(i);
+            }
+        }
+        Reservation toDelReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
+        //looking in hashmap for the reservation to delete
+        for (int i = 1; i< reservations.getReservations().size(); i++ ){
+            if(reservations.getReservations().get(i)==toDelReservation){
+                reservations.getReservations().remove(i); //delete reservation in hashmap
+                Model.delreservation(toDelReservation); //delete reservation in database
+            }
         }
     }
 }

@@ -11,4 +11,6 @@ module com.example.tp_blumestein_esnault {
     exports com.example.tp_blumestein_esnault.connection;
     opens com.example.tp_blumestein_esnault.inscription to javafx.fxml;
     exports com.example.tp_blumestein_esnault.inscription;
+    opens com.example.tp_blumestein_esnault.AddSalle to javafx.fxml;
+    exports com.example.tp_blumestein_esnault.AddSalle;
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="270.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tp_blumestein_esnault.AddSalle.AddSalleController">
+    <children>
+        <Text layoutX="20.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom de salle :" textAlignment="RIGHT" />
+        <TextField fx:id="nameSalle" layoutX="107.0" layoutY="143.0" />
+        <Button layoutX="108.0" layoutY="224.0" mnemonicParsing="false" onAction="#AddSalle" text="Ajouter" />
+    </children>
+</Pane>

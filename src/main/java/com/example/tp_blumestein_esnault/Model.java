@@ -3,6 +3,7 @@ package com.example.tp_blumestein_esnault;
 import com.example.tp_blumestein_esnault.donnees.*;
 
 import java.sql.*;
+import com.example.tp_blumestein_esnault.MainController;
 
 public interface Model {
     Connection conn = Bdd.conn;
@@ -141,9 +142,10 @@ public interface Model {
         }
 return salle;
     }
+
     public static void getAllSalle() throws SQLException {
 
-        String query = "SELECT Nom_Salle FROM salle";
+        String query = "SELECT * FROM salle";
 
 
         //create a statement
@@ -228,6 +230,7 @@ return salle;
         }
 return reservation;
     }
+
     public static Reservation getReservationByUser(Utilisateur utilisateur) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE Id_Utilisateur=?";
@@ -279,6 +282,22 @@ return reservation;
 
     }
 
+    public static void getReservation(Utilisateur utilisateur) throws SQLException {
+
+        String query = "SELECT Nom,Prenom FROM reservation WHERE idUtilisateur=?";
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, utilisateur.getId_Utilisateur());
+
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Reservation reservation= new Reservation(utilisateur.getId_Utilisateur(), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+        }
+
+    }
+
     public static void updateReservation(Reservation reservation) {
 
         String query = "UPDATE reservation SET Debut_Reservation=?,Fin_Reservation=?,Id_Salle=? WHERE idReservation=(?)";
@@ -295,6 +314,7 @@ return reservation;
             e.printStackTrace();
         }
     }
+
     public static void delreservation(Reservation reservation) throws SQLException {
 
         String query = "DELETE FROM reservation WHERE idReservation=(?) ;";

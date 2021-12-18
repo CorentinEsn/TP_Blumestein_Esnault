@@ -51,6 +51,8 @@ public class MainController {
     private LocalDate currentJour=LocalDate.now();
     private LocalTime currentHeureDebut=LocalTime.now();
     private LocalTime currentHeureFin=LocalTime.now();
+    private LocalDateTime refCurrentDateTime = currentDebut_Reservation;
+
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
     public Salles salles=Model.salles;
@@ -63,6 +65,7 @@ public class MainController {
     public void register() throws IOException {
         new InscriptionApplication().start(new Stage());
     }
+
     public void openAddSallePopup() throws IOException {
         new AddSalleApplication().start(new Stage());
     }
@@ -89,10 +92,10 @@ public class MainController {
         textZone.getChildren().add(new Text("Ici apparaîssent les réservations\n"));
         for (int i=1;i<Model.reservations.getReservations().size()+1;i++){
             textZone.getChildren().add(new Text("Salle : "+Model.reservations.getReservations().get(i).getSalle().getNom_Salle()+
-            "\n Heure de début : "+Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                    "\n Heure de début : "+Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
                     +"\n Heure de fin : "+Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-            +"\n Réservée par : "+Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur()+" "
-                    +Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur()+"\n\n\n"));
+                    +"\n Réservée par : "+Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur()+" "
+                    +Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur()+"\n\n"));
         }
     }
 
@@ -118,14 +121,15 @@ public class MainController {
             if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
                 currentSalle = salles.getSalles().get(i);
 
-                textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()+"\n"));
+                //textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()+"\n"));
+                setText();
             }
         }
     }
 
     public void addReservation(ActionEvent actionEvent) throws SQLException {
         currentJour = datePicker.getValue();
-    //System.out.println(currentHeureDebut);
+        //System.out.println(currentHeureDebut);
         currentDebut_Reservation=LocalDateTime.of(currentJour, currentHeureDebut);
         currentFin_Reservation=LocalDateTime.of(currentJour, currentHeureFin);
         for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++){
@@ -141,13 +145,15 @@ public class MainController {
     }
 
     public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
-        for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++) {
+        /*for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++) {
             if (Model.utilisateurs.getUtilisateurs().get(i).isCurrent()) {
                 currentUtilisateur = Model.utilisateurs.getUtilisateurs().get(i);
             }
         }
-        Model.getReservationByUser(currentUtilisateur);
+        Model.getReservationByUser(currentUtilisateur);*/
+        setText();
     }
+
     public void setCurHour1(ActionEvent actionEvent){
         setCurHour(1);
     }
@@ -161,35 +167,48 @@ public class MainController {
         setCurHour(4);
     }
     public void setCurHour(int i) {
-        //heureButton.setText(actionEvent.getTarget().getClass().getText());
-        switch (i){
-            case 1 :
-                currentHeureDebut=LocalTime.of(8, 15);
-            System.out.println(currentHeureDebut);
-                currentHeureFin=LocalTime.of(10, 15);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 8h15-10h15\n"));
+        switch (i) {
+            case 1 -> {
+                currentHeureDebut = LocalTime.of(8, 15);
+                System.out.println(currentHeureDebut);
+                currentHeureFin = LocalTime.of(10, 15);
+                //textZone.getChildren().add(new Text("Créneau sélectionné : 8h15-10h15\n"));
+                if (currentJour != null) {
+                    setText();
+                }
+                ;
                 heureButton.setText("8h15-10h15");
-                break;
-            case 2 :
-                currentHeureDebut=LocalTime.of(10, 30);
-                currentHeureFin=LocalTime.of(12, 30);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 10h30-12h30\n"));
+            }
+            case 2 -> {
+                currentHeureDebut = LocalTime.of(10, 30);
+                currentHeureFin = LocalTime.of(12, 30);
+                //textZone.getChildren().add(new Text("Créneau sélectionné : 10h30-12h30\n"));
                 heureButton.setText("10h30-12h30");
-                break;
-
-            case 3 :
-                currentHeureDebut=LocalTime.of(14, 0);
-                currentHeureFin=LocalTime.of( 16, 0);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 14h00-16h00\n"));
+                if (currentJour != null) {
+                    setText();
+                }
+                ;
+            }
+            case 3 -> {
+                currentHeureDebut = LocalTime.of(14, 0);
+                currentHeureFin = LocalTime.of(16, 0);
+                //textZone.getChildren().add(new Text("Créneau sélectionné : 14h00-16h00\n"));
                 heureButton.setText("14h00-16h00");
-                break;
-
-            case 4 :
-                currentHeureDebut=LocalTime.of(16, 15);
-                currentHeureFin=LocalTime.of( 18, 15);
-                textZone.getChildren().add(new Text("Créneau sélectionné : 16h15-18h15\n"));
+                if (currentJour != null) {
+                    setText();
+                }
+                ;
+            }
+            case 4 -> {
+                currentHeureDebut = LocalTime.of(16, 15);
+                currentHeureFin = LocalTime.of(18, 15);
+                //textZone.getChildren().add(new Text("Créneau sélectionné : 16h15-18h15\n"));
                 heureButton.setText("16h15-18h15");
-                break;
+                if (currentJour != null) {
+                    setText();
+                }
+                ;
+            }
         }
     }
 
@@ -210,6 +229,139 @@ public class MainController {
                 reservations.getReservations().remove(i); //delete reservation in hashmap
                 Model.delreservation(toDelReservation); //delete reservation in database
             }
+        }
+    }
+
+    public void setText(){
+        textZone.getChildren().clear();
+        int c = 0;
+        //par salle
+        if (currentSalle != null && currentUtilisateur == null && refCurrentDateTime == currentDebut_Reservation){
+            c = 1;
+        }
+        //par date
+        else if (currentSalle == null && currentUtilisateur == null && refCurrentDateTime != currentDebut_Reservation){
+            c = 2;
+        }
+        //par utilisateur
+        else if (currentSalle == null && currentUtilisateur != null && refCurrentDateTime == currentDebut_Reservation){
+            c = 3;
+        }
+        //par salle et date
+        else if (currentSalle != null && currentUtilisateur == null && refCurrentDateTime != currentDebut_Reservation){
+            c = 4;
+        }
+        //par salle et utilisateur
+        else if (currentSalle != null && currentUtilisateur != null && refCurrentDateTime == currentDebut_Reservation){
+            c = 5;
+        }
+        //par date et utilisateur
+        else if (currentSalle == null && currentUtilisateur != null && refCurrentDateTime != currentDebut_Reservation){
+            c = 6;
+        }
+        //par salle et date et utilisateur
+        else if (currentSalle != null && currentUtilisateur != null && refCurrentDateTime != currentDebut_Reservation){
+            c = 7;
+        }
+
+        textZone.getChildren().add(new Text("Ici apparaîssent les réservations\n"+c));
+        switch (c){
+            case 1 :
+                //par salle
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
+
+            case 2 :
+                //par date
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut)) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
+            case 3 :
+                //par utilisateur
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
+
+            case 4 :
+                //par salle et date
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle && Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut)) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
+
+            case 5 :
+                //par salle et utilisateur
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle && Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
+
+            case 6 :
+                //par date et utilisateur
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut) && Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
+
+            case 7 :
+                //par salle et date et utilisateur
+                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
+                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle && Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut) && Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+
+                    }
+                }
+                break;
         }
     }
 }

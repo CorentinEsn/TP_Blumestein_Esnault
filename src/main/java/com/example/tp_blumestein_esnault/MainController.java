@@ -69,7 +69,15 @@ public class MainController {
     public void addSalleSelection(String salleName) throws SQLException {
         MenuButton salleButton = new MenuButton();
         Model.addSalle(new Salle(salleName));
-        salleButton.getItems().addAll(new MenuItem(salleName));
+        MenuItem newSalle = new MenuItem(salleName);
+        salleButton.getItems().addAll(newSalle);
+        newSalle.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                salleButton.setText(event.getTarget().toString());
+                setCurSalle(event);
+            }
+        });;
     }
 
     public void deleteSalle() throws IOException {
@@ -81,7 +89,7 @@ public class MainController {
     }
 
     public void initializeSalles() throws SQLException {
-            //initialize salle selection button
+        //initialize salle selection button
         int i;
         for (i=1; i< salles.getSalles().size()+1;i++){
             sallesItems.add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
@@ -94,7 +102,6 @@ public class MainController {
                     setCurSalle(event);
                 }
             });
-
         }
     }
 
@@ -123,6 +130,7 @@ public class MainController {
     }
 
     public void setCurHour(ActionEvent actionEvent) {
+        //heureButton.setText(actionEvent.getTarget().getClass().getText());
         String creneau = heureButton.getText();
         switch (creneau){
             case "8h15-10h15" :

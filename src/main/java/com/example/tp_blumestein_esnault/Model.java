@@ -101,14 +101,21 @@ public interface Model {
 
     //Salle
 
-    public static void addSalle(Salle salle) {
+    public static void addSalle(Salle salle) throws SQLException{
 
+        String getIdMax = "SELECT MAX(idSalle) FROM salle ";
+        PreparedStatement stmt=conn.prepareStatement(getIdMax);
 
+        ResultSet resultMax=stmt.executeQuery();
+        int idMax=0;
+        while(resultMax.next()) {
+            idMax=resultMax.getInt(1);
+        }
         String query = "INSERT INTO salle VALUES (?, ?)";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(query);
-            pstmt.setInt(1, 1);
+            pstmt.setInt(1, idMax+1);
             pstmt.setString(2,salle.getNom_Salle());
             pstmt.execute();
         } catch (SQLException e) {

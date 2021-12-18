@@ -3,7 +3,7 @@ package com.example.tp_blumestein_esnault.donnees;
 import java.util.HashMap;
 
 public class Salles {
-    private HashMap<Integer,Salle> salles;
+    private final HashMap<Integer,Salle> salles;
 
     public Salles() {
         this.salles = new HashMap<>();

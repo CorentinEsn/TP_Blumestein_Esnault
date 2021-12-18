@@ -11,7 +11,6 @@ import java.util.Scanner;
 public class Bdd {
 
 	public static Connection conn;
-	private static Statement stmt;
 
 	public static void initConnection() {
 

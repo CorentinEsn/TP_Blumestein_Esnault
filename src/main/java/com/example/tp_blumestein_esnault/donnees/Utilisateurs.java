@@ -3,7 +3,7 @@ package com.example.tp_blumestein_esnault.donnees;
 import java.util.HashMap;
 
 public class Utilisateurs {
-    private HashMap<Integer,Utilisateur> utilisateurs;
+    private final HashMap<Integer,Utilisateur> utilisateurs;
 
     public Utilisateurs() {
         this.utilisateurs = new HashMap<>();

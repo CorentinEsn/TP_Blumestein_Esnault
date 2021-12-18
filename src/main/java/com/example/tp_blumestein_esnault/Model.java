@@ -14,7 +14,7 @@ public interface Model {
 
     //USER
 
-    public static void addUser(String nom,String prenom,String password) throws SQLException {
+    static void addUser(String nom, String prenom, String password) throws SQLException {
         String getIdMax = "SELECT MAX(idUtilisateur) FROM utilisateur";
         PreparedStatement stmt=conn.prepareStatement(getIdMax);
 
@@ -40,7 +40,7 @@ public interface Model {
 
     }
 
-    public static Utilisateur getUser(int id) throws SQLException {
+    static Utilisateur getUser(int id) throws SQLException {
 
 
         Statement s;
@@ -59,7 +59,7 @@ public interface Model {
         return u;
     }
 
-    public static void updateUser(int id,String nom,String prenom,String password) {
+    static void updateUser(int id, String nom, String prenom, String password) {
 
         String query = "UPDATE utilisateur SET Nom=?,Prenom=?,Password=? WHERE idUtilisateur=(?)";
         PreparedStatement pstmt;
@@ -76,7 +76,7 @@ public interface Model {
         }
     }
 
-    public static void delUser(int id) throws SQLException {
+    static void delUser(int id) throws SQLException {
 
         Statement s;
         String query = "DELETE FROM utilisateur WHERE idUtilisateur=(?) ;";
@@ -93,7 +93,7 @@ public interface Model {
         }
     }
 
-    public static void getAllUser() throws SQLException {
+    static void getAllUser() throws SQLException {
         Statement s;
         String query = "SELECT * FROM utilisateur";
 
@@ -110,7 +110,7 @@ public interface Model {
 
     //Salle
 
-    public static void addSalle(Salle salle) throws SQLException{
+    static void addSalle(Salle salle) throws SQLException{
 
         String getIdMax = "SELECT MAX(idSalle) FROM salle";
         PreparedStatement stmt=conn.prepareStatement(getIdMax);
@@ -134,7 +134,7 @@ public interface Model {
 
     }
 
-    public static Salle getSalle(int id) throws SQLException {
+    static Salle getSalle(int id) throws SQLException {
 
         String query = "SELECT Nom_Salle FROM salle WHERE idSalle=?";
 
@@ -151,7 +151,7 @@ public interface Model {
 return salle;
     }
 
-    public static void getAllSalle() throws SQLException {
+    static void getAllSalle() throws SQLException {
 
         String query = "SELECT * FROM salle";
 
@@ -168,7 +168,7 @@ return salle;
 
     }
 
-    public static void updateSalle(Salle salle) {
+    static void updateSalle(Salle salle) {
 
         String query = "UPDATE salle SET Nom_Salle=? WHERE idSaller=(?)";
         PreparedStatement pstmt;
@@ -183,7 +183,7 @@ return salle;
         }
     }
 
-    public static void delSalle(Salle salle) throws SQLException {
+    static void delSalle(Salle salle) throws SQLException {
 
         String query = "DELETE FROM salle WHERE idSalle=(?) ;";
 
@@ -202,7 +202,7 @@ return salle;
 
     //Reservation
 
-    public static void addReservation(Reservation reservation) throws SQLException {
+    static void addReservation(Reservation reservation) throws SQLException {
 
         String getIdMax = "SELECT MAX(idReservation) FROM reservation";
         PreparedStatement stmt=conn.prepareStatement(getIdMax);
@@ -231,7 +231,7 @@ return salle;
 
     }
 
-    public static Reservation getReservationByID(int id) throws SQLException {
+    static Reservation getReservationByID(int id) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE idReservation=?";
 
@@ -248,7 +248,7 @@ return salle;
 return reservation;
     }
 
-    public static Reservation getReservationByUser(Utilisateur utilisateur) throws SQLException {
+    static Reservation getReservationByUser(Utilisateur utilisateur) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE Id_Utilisateur=?";
 
@@ -265,7 +265,7 @@ return reservation;
 return reservation;
     }
 
-    public static Reservation getReservationBySalle(Salle salle) throws SQLException {
+    static Reservation getReservationBySalle(Salle salle) throws SQLException {
 
         String query = "SELECT * FROM reservation WHERE id_Salle=?";
 
@@ -283,7 +283,7 @@ return reservation;
     }
 
 
-    public static void getAllReservation() throws SQLException {
+    static void getAllReservation() throws SQLException {
 
         String query = "SELECT * FROM reservation";
 
@@ -299,23 +299,7 @@ return reservation;
 
     }
 
-    public static void getReservation(Utilisateur utilisateur) throws SQLException {
-
-        String query = "SELECT Nom,Prenom FROM reservation WHERE idUtilisateur=?";
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        stmt.setInt(1, utilisateur.getId_Utilisateur());
-
-        ResultSet rs = stmt.executeQuery();
-        while(rs.next()) {
-            Reservation reservation= new Reservation(utilisateur.getId_Utilisateur(), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
-        }
-
-    }
-
-    public static void updateReservation(Reservation reservation) {
+    static void updateReservation(Reservation reservation) {
 
         String query = "UPDATE reservation SET Debut_Reservation=?,Fin_Reservation=?,Id_Salle=? WHERE idReservation=(?)";
         PreparedStatement pstmt;
@@ -332,7 +316,7 @@ return reservation;
         }
     }
 
-    public static void delreservation(Reservation reservation) throws SQLException {
+    static void delreservation(Reservation reservation) throws SQLException {
 
         String query = "DELETE FROM reservation WHERE idReservation=(?) ;";
 

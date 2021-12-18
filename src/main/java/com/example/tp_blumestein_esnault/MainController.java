@@ -9,6 +9,7 @@ import com.example.tp_blumestein_esnault.DelSalle.DelSalleApplication;
 import com.example.tp_blumestein_esnault.donnees.*;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
@@ -21,6 +22,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javafx.scene.control.Button;
@@ -40,6 +42,8 @@ public class MainController {
     private Button userReservationButton;
     @FXML
     public TextFlow textZone;
+    @FXML
+    public ArrayList<MenuItem> sallesItems=new ArrayList<>();
 
     private LocalDateTime currentDebut_Reservation;
     private LocalDateTime currentFin_Reservation;
@@ -78,13 +82,24 @@ public class MainController {
 
     public void initializeSalles() throws SQLException {
             //initialize salle selection button
-        for (int i =1; i< salles.getSalles().size()+1;i++){
-            salleButton.getItems().add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
-
+        int i;
+        for (i=1; i< salles.getSalles().size()+1;i++){
+            System.out.println(i);
+            sallesItems.add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
+            salleButton.getItems().add(sallesItems.get(i-1));
+            int finalI = i;
+            sallesItems.get(i-1).setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    salleButton.setText(sallesItems.get(finalI).getText());
+                }
+            });
+        }
     }
-}
+
 
     public void setCurSalle(ActionEvent actionEvent) {
+
         for (int i=0; i < salles.getSalles().size();i++){ //go through the hashmap
             if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
                 currentSalle = salles.getSalles().get(i);
@@ -103,7 +118,7 @@ public class MainController {
     }
 
     public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
-        Model.getReservation(currentUtilisateur);
+        Model.getReservationByUser(currentUtilisateur);
     }
 
     public void setCurHour(ActionEvent actionEvent) {

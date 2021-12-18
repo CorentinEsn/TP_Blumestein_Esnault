@@ -5,6 +5,10 @@ import java.util.HashMap;
 public class Utilisateurs {
     private HashMap<Integer,Utilisateur> utilisateurs;
 
+    public Utilisateurs() {
+        this.utilisateurs = new HashMap<>();
+    }
+
     public HashMap<Integer, Utilisateur> getUtilisateurs() {
         return utilisateurs;
     }

@@ -41,12 +41,12 @@ public interface Model {
         //create a statement
         PreparedStatement stmt = conn.prepareStatement(query);
 
-            stmt.setInt(1, id);
+        stmt.setInt(1, id);
 
-            ResultSet rs = stmt.executeQuery();
-            while(rs.next()) {
-                Utilisateur u = new Utilisateur(id, rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
-            }
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Utilisateur u = new Utilisateur(id, rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
+        }
 
     }
 
@@ -104,7 +104,7 @@ public interface Model {
 
     }
 
-    public static void getSalle(int id) throws SQLException {
+    /*public static void getSalle(int id) throws SQLException {
 
         String query = "SELECT Nom_Salle FROM salle WHERE idSalle=?";
 
@@ -118,6 +118,26 @@ public interface Model {
         while(rs.next()) {
             Salle salle = new Salle(id, rs.getString("Nom_Salle"));
         }
+    }*/
+
+    public static Salle getSalle(int id) throws SQLException {
+
+        String query = "SELECT Nom_Salle FROM salle WHERE idSalle=?";
+
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, id);
+
+        ResultSet rs = stmt.executeQuery();
+        /*while(rs.next()) {
+            Salle salle = new Salle(id, rs.getString("Nom_Salle"));
+        }*/
+        if (rs != null){
+            return new Salle(id, rs.getString("Nom_Salle"));
+        }
+        else return null;
 
     }
 

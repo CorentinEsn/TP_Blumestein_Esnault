@@ -29,8 +29,10 @@ public class MainApplication extends Application {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         Bdd.initConnection();
+        Model.getAllUser();
+        Model.getAllSalle();
+        Model.getAllReservation();
         launch();
 
 

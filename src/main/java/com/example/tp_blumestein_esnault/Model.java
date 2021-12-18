@@ -84,6 +84,20 @@ public interface Model {
         }
     }
 
+    public static void getAllUser() throws SQLException {
+        Statement s;
+        String query = "SELECT * FROM utilisateur";
+
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Utilisateur u = new Utilisateur(rs.getInt(1), rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
+            utilisateurs.addUtilisateur(u);
+        }
+    }
 
     //Salle
 
@@ -117,6 +131,22 @@ public interface Model {
         ResultSet rs = stmt.executeQuery();
         while(rs.next()) {
             Salle salle = new Salle(id, rs.getString("Nom_Salle"));
+        }
+
+    }
+    public static void getAllSalle() throws SQLException {
+
+        String query = "SELECT Nom_Salle FROM salle";
+
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Salle salle = new Salle(rs.getInt("idSalle"), rs.getString("Nom_Salle"));
+            salles.addSalle(salle);
         }
 
     }
@@ -175,9 +205,9 @@ public interface Model {
 
     }
 
-    public static void getReservation(int id) throws SQLException {
+    public static void getReservationByID(int id) throws SQLException {
 
-        String query = "SELECT Nom,Prenom FROM reservation WHERE idReservation=?";
+        String query = "SELECT * FROM reservation WHERE idReservation=?";
 
 
         //create a statement
@@ -188,6 +218,55 @@ public interface Model {
         ResultSet rs = stmt.executeQuery();
         while(rs.next()) {
             Reservation reservation= new Reservation(id, rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+        }
+
+    }
+    public static void getReservationByUser(Utilisateur utilisateur) throws SQLException {
+
+        String query = "SELECT * FROM reservation WHERE Id_Utilisateur=?";
+
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, utilisateur.getId_Utilisateur());
+
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Reservation reservation= new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+        }
+
+    }
+
+    public static void getReservationBySalle(Salle salle) throws SQLException {
+
+        String query = "SELECT * FROM reservation WHERE id_Salle=?";
+
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        stmt.setInt(1, salle.getId_Salle());
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            Reservation reservation = new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(), salles.getSalles().get(rs.getInt("Id_Utilisateur")), utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+        }
+    }
+
+
+    public static void getAllReservation() throws SQLException {
+
+        String query = "SELECT * FROM reservation";
+
+
+        //create a statement
+        PreparedStatement stmt = conn.prepareStatement(query);
+
+        ResultSet rs = stmt.executeQuery();
+        while(rs.next()) {
+            Reservation reservation= new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
+            reservations.addReservation(reservation);
         }
 
     }
@@ -223,5 +302,7 @@ public interface Model {
 
         }
     }
+
+
 
 }

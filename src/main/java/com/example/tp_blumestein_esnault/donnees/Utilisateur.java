@@ -5,18 +5,21 @@ public class Utilisateur {
     private String Nom_Utilisateur;
     private String Prenom_Utilisateur;
     private String password;
+    private boolean current;
 
-    public Utilisateur(int id, String nom, String prenom, String password) {
+    public Utilisateur(Integer id, String nom, String prenom, String password) {
         Id_Utilisateur=id;
         Nom_Utilisateur =nom;
         Prenom_Utilisateur=prenom;
         this.password = password;
+        this.current=false;
     }
     public Utilisateur(String nom, String prenom, String password) {
         this.password = password;
         Id_Utilisateur=0;
         Nom_Utilisateur =nom;
         Prenom_Utilisateur=prenom;
+        this.current=false;
     }
 
     public int getId_Utilisateur() {

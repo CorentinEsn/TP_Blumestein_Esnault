@@ -10,7 +10,7 @@
       <Text layoutX="59.0" layoutY="97.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nom :" textAlignment="RIGHT" wrappingWidth="36.232421875" />
       <TextField fx:id="name" layoutX="107.0" layoutY="80.0" />
       <Text layoutX="20.0" layoutY="160.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mot de Passe :" textAlignment="RIGHT" />
-      <TextField fx:id="password" layoutX="107.0" layoutY="143.0" />
+      <TextField fx:id="password" layoutX="104.0" layoutY="143.0" />
       <Button layoutX="92.0" layoutY="223.0" mnemonicParsing="false" onAction="#connect" text="Se Connecter" />
    </children>
 </Pane>

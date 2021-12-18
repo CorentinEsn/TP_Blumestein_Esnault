@@ -16,6 +16,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class MainController {
     private LocalDateTime currentFin_Reservation;
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
-    public Salles salles;
+    public Salles salles=Model.salles;
     public Reservations reservations;
 
     @FXML
@@ -71,16 +72,12 @@ public class MainController {
 
     public void initializeSalles() throws SQLException {
         //initialize hashmap
-        int i = 1;
-        while (Model.getSalle(i) != null){
-            Salle salleToAdd = Model.getSalle(i);
 
             //initialize hashmap
-            salles = new Salles();
-            salles.addSalle(salleToAdd);
             //initialize salle selection button
-            salleButton.getItems().add(new MenuItem(salleToAdd.getNom_Salle()));
-        }
+        for (int i =1; i< salles.getSalles().size()+1;i++){
+            salleButton.getItems().add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
+
     }
 
     /*public void setCurSalle(ActionEvent actionEvent) {
@@ -103,4 +100,5 @@ public class MainController {
     }*/
 
     //public void setCurHour(ActionEvent actionEvent) {}
+}
 }

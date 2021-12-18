@@ -21,6 +21,9 @@ public class MainApplication extends Application {
         MainController mainController = fxmlLoader.getController();
         stage.setTitle("Reservation de salles");
 
+        Model.getAllUser();
+        Model.getAllSalle();
+        Model.getAllReservation();
         //initialization of Salle selections and TextFlow
         mainController.initializeSalles();
         mainController.initializeText();
@@ -37,9 +40,7 @@ public class MainApplication extends Application {
             e.printStackTrace();
         }
         Bdd.initConnection();
-        Model.getAllUser();
-        Model.getAllSalle();
-        Model.getAllReservation();
+
         launch();
 
         Bdd.closeConnection();

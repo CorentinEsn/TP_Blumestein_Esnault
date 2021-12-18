@@ -7,6 +7,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.sql.SQLException;
+
 public class InscriptionController {
 
 
@@ -15,7 +17,7 @@ public class InscriptionController {
     @FXML
     private Button registerbutton;
     @FXML
-    public void signin(){
+    public void signin() throws SQLException {
     Model.addUser(name.getText(),firstname.getText(),password.getText());
     Stage stage = (Stage) registerbutton.getScene().getWindow();
     stage.close();

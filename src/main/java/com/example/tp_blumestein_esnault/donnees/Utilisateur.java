@@ -45,4 +45,20 @@ public class Utilisateur {
     public void setPrenom_Utilisateur(String prenom_Utilisateur) {
         Prenom_Utilisateur = prenom_Utilisateur;
     }
+
+    public boolean isCurrent() {
+        return current;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 }

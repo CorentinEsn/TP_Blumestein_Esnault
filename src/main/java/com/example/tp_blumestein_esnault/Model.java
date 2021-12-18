@@ -14,14 +14,21 @@ public interface Model {
 
     //USER
 
-    public static void addUser(String nom,String prenom,String password) {
+    public static void addUser(String nom,String prenom,String password) throws SQLException {
+        String getIdMax = "SELECT MAX(idUtilisateur) FROM utilisateur";
+        PreparedStatement stmt=conn.prepareStatement(getIdMax);
 
+        ResultSet resultMax=stmt.executeQuery();
+        int idMax=0;
+        while(resultMax.next()) {
+            idMax=resultMax.getInt(1);
+        }
 
         String query = "INSERT INTO utilisateur VALUES (?, ?, ?,?)";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(query);
-            pstmt.setInt(1, 1);
+            pstmt.setInt(1,idMax+1 );
             pstmt.setString(2,nom);
             pstmt.setString(3, prenom);
             pstmt.setString(4, password);
@@ -35,16 +42,17 @@ public interface Model {
 
     public static Utilisateur getUser(int id) throws SQLException {
 
+
         Statement s;
         String query = "SELECT Nom,Prenom,Password FROM utilisateur WHERE idUtilisateur=?";
 
 
         //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
+        PreparedStatement pstmt = conn.prepareStatement(query);
 
-            stmt.setInt(1, id);
+            pstmt.setInt(1, id);
         Utilisateur u=null;
-            ResultSet rs = stmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
             while(rs.next()) {
                 u = new Utilisateur(id, rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
             }
@@ -194,14 +202,23 @@ return salle;
 
     //Reservation
 
-    public static void addReservation(Reservation reservation) {
+    public static void addReservation(Reservation reservation) throws SQLException {
+
+        String getIdMax = "SELECT MAX(idReservation) FROM reservation";
+        PreparedStatement stmt=conn.prepareStatement(getIdMax);
+
+        ResultSet resultMax=stmt.executeQuery();
+        int idMax=0;
+        while(resultMax.next()) {
+            idMax=resultMax.getInt(1);
+        }
 
 
         String query = "INSERT INTO reservation VALUES (?, ?, ?,?,?)";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(query);
-            pstmt.setInt(1, 1);
+            pstmt.setInt(1, idMax+1);
             pstmt.setTimestamp(2,Timestamp.valueOf(reservation.getDebut_Reservation()));
             pstmt.setTimestamp(3, Timestamp.valueOf(reservation.getFin_Reservation()));
             pstmt.setInt(4,reservation.getUtilisateur().getId_Utilisateur());

@@ -1,7 +1,9 @@
 package com.example.tp_blumestein_esnault;
 
+import com.example.tp_blumestein_esnault.donnees.Reservation;
 import com.example.tp_blumestein_esnault.donnees.Salle;
 import com.example.tp_blumestein_esnault.donnees.Salles;
+import com.example.tp_blumestein_esnault.donnees.Utilisateur;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,17 +34,22 @@ public class MainApplication extends Application {
         stage.show();
     }
 
-    public static void main(String[] args) throws SQLException {
-
+    public static void main(String[] args) throws Exception {
+        ConnectBdd.initConnection();
+        initialize();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-        Bdd.initConnection();
 
         launch();
 
         Bdd.closeConnection();
+    }
+    public static void initialize() throws Exception {
+        Reservation.initialize();
+        Salle.initialize();
+        Utilisateur.initialize();
     }
 }

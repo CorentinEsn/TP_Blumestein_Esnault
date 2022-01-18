@@ -1,10 +1,15 @@
 package com.example.tp_blumestein_esnault.donnees;
 
+import com.example.tp_blumestein_esnault.DAO;
+
 import java.time.LocalDateTime;
 import javax.persistence.*;
 
 @Entity
 public class Reservation {
+    @Transient
+    private static Reservation reservationInstance = new Reservation();
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int Id_Reservation;
@@ -32,6 +37,29 @@ public class Reservation {
         Fin_Reservation = fin;
         Salle = salle;
         Utilisateur = utilisateur;
+    }
+    public Reservation() {
+        Id_Reservation =0;
+        Debut_Reservation = null;
+        Fin_Reservation =null;
+        Salle = null;
+        Utilisateur = null;
+    }
+    public static Reservation getInstance() {
+        if (reservationInstance == null) {
+            reservationInstance = new Reservation();
+        }
+        return reservationInstance;
+    }
+    public static void initialize(){
+        DAO reservationDAO = new DAO(Reservation.class);
+        if (reservationDAO.getAll().isEmpty()) {
+            reservationDAO.persist(Reservation.getInstance());
+        } else {
+            Reservation.getInstance().setId_Reservation(0);
+            Reservation.getInstance().setDebut_Reservation((LocalDateTime) reservationDAO.getColumn(0, "Debut_Reservation"));
+            Reservation.getInstance().setFin_Reservation((LocalDateTime) reservationDAO.getColumn(0,"Fin_Reservation"));
+        }
     }
 
     public int getId_Reservation() {

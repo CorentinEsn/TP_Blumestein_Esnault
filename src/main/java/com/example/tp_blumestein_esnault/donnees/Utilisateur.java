@@ -1,8 +1,13 @@
 package com.example.tp_blumestein_esnault.donnees;
 import javax.persistence.*;
 
+import com.example.tp_blumestein_esnault.DAO;
+
 @Entity
+@Table(name = "utilisateur")
 public class Utilisateur {
+    @Transient
+    private static Utilisateur utilisateurInstance = new Utilisateur();
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -28,8 +33,30 @@ public class Utilisateur {
     }
 
     public Utilisateur() {
-
+        this.password = null;
+        Id_Utilisateur=0;
+        Nom_Utilisateur =null;
+        Prenom_Utilisateur=null;
+        this.current=false;
     }
+    public static Utilisateur getInstance() {
+        if (utilisateurInstance == null) {
+            utilisateurInstance = new Utilisateur();
+        }
+        return utilisateurInstance;
+    }
+    public static void initialize() {
+        DAO utilisateurDAO = new DAO(Utilisateur.class);
+        if (utilisateurDAO.getAll().isEmpty()) {
+            utilisateurDAO.persist(Salle.getInstance());
+        } else {
+            Utilisateur.getInstance().setId_Utilisateur(0);
+            Utilisateur.getInstance().setNom_Utilisateur((String) utilisateurDAO.getColumn(0, "Nom"));
+            Utilisateur.getInstance().setPrenom_Utilisateur((String) utilisateurDAO.getColumn(0, "Prenom"));
+            Utilisateur.getInstance().setPassword((String) utilisateurDAO.getColumn(0, "password"));
+        }
+    }
+
 
     public int getId_Utilisateur() {
         return Id_Utilisateur;

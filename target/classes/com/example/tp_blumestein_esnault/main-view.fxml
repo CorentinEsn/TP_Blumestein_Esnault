@@ -2,67 +2,52 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="559.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tp_blumestein_esnault.MainController">
-    <children>
-        <MenuBar>
-            <menus>
-                <Menu mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Salles">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#openAddSallePopup" text="Ajouter une salle" />
-                        <MenuItem mnemonicParsing="false" onAction="#deleteSalle" text="Supprimer une salle" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Help">
-                    <items>
-                        <MenuItem mnemonicParsing="false" text="About" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Connexion">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#login" text="Login" />
-                        <MenuItem mnemonicParsing="false" onAction="#register" text="Register" />
-                    </items>
-                </Menu>
-            </menus>
-        </MenuBar>
-        <SplitPane dividerPositions="0.35" prefHeight="496.0" prefWidth="615.0">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="615.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tp_blumestein_esnault.MainController">
+   <children>
+      <MenuBar VBox.vgrow="NEVER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
             <items>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="493.0" prefWidth="269.0">
-                    <children>
-                        <DatePicker fx:id="datePicker" layoutX="28.0" layoutY="180.0" prefHeight="25.0" prefWidth="123.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
-                        <MenuButton fx:id="salleButton" layoutX="20.0" layoutY="142.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" text="Salle" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Non spécifié" />
-                            </items></MenuButton>
-                        <MenuButton fx:id="heureButton" layoutX="29.0" layoutY="221.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="123.0" text="Heure" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-                            <items>
-                                <MenuItem mnemonicParsing="false" text="Non spécifié" />
-                                <MenuItem mnemonicParsing="false" onAction="#setCurHour1" text="8h15-10h15" />
-                                <MenuItem mnemonicParsing="false" onAction="#setCurHour2" text="10h30-12h30" />
-                                <MenuItem mnemonicParsing="false" onAction="#setCurHour3" text="14h00-16h00" />
-                                <MenuItem mnemonicParsing="false" onAction="#setCurHour4" text="16h15-18h15" />
-                            </items></MenuButton>
-                        <Button fx:id="userReservationButton" layoutX="53.0" layoutY="441.0" mnemonicParsing="false" onAction="#selectUserReservations" text="Mes réservations" AnchorPane.bottomAnchor="10.0" />
-                        <SplitMenuButton fx:id="reserverButton" layoutX="63.0" layoutY="406.0" mnemonicParsing="false" onAction="#addReservation" text="Réserver" AnchorPane.bottomAnchor="45.0">
-                            <items>
-                                <MenuItem fx:id="annulerButton" mnemonicParsing="false" onAction="#supprReservation" text="Annuler" />
-                            </items>
-                        </SplitMenuButton>
-                    </children>
-                </AnchorPane>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                    <children>
-                        <TextFlow fx:id="textZone" prefHeight="200.0" prefWidth="335.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                    </children>
-                </AnchorPane>
+              <MenuItem mnemonicParsing="false" text="Close" />
             </items>
-        </SplitPane>
-    </children>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Connexion">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#login" text="Login" />
+                  <MenuItem mnemonicParsing="false" onAction="#register" text="Register" />
+              </items>
+            </Menu>
+        </menus>
+      </MenuBar>
+      <TableView fx:id="calendrierReservations" maxWidth="600.0" prefHeight="442.0" prefWidth="600.0">
+        <columns>
+            <TableColumn prefWidth="75.0" sortable="false" text="Heures" />
+          <TableColumn prefWidth="75.0" sortable="false" text="Lundi" />
+          <TableColumn prefWidth="75.0" sortable="false" text="Mardi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Mercredi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Jeudi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Vendredi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Samedi" />
+            <TableColumn prefWidth="75.0" sortable="false" text="Dimanche" />
+        </columns>
+      </TableView>
+      <ButtonBar maxHeight="78.0" prefHeight="78.0" prefWidth="530.0" snapToPixel="false" VBox.vgrow="NEVER">
+        <buttons>
+            <Button fx:id="refreshButton" mnemonicParsing="false" onAction="#reDraw" text="Refresh" />
+            <Button fx:id="reserverButton" mnemonicParsing="false" text="Réserver" />
+            <Button fx:id="userReservationsButton" mnemonicParsing="false" text="Mes réservations" />
+        </buttons>
+      </ButtonBar>
+   </children>
 </VBox>

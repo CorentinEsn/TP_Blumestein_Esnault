@@ -1,6 +1,11 @@
 package com.example.tp_blumestein_esnault.donnees;
+import javax.persistence.*;
 
+@Entity
 public class Utilisateur {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private int Id_Utilisateur;
     private String Nom_Utilisateur;
     private String Prenom_Utilisateur;

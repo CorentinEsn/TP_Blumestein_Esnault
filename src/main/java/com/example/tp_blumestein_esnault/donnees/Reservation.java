@@ -1,12 +1,22 @@
 package com.example.tp_blumestein_esnault.donnees;
 
 import java.time.LocalDateTime;
+import javax.persistence.*;
 
+@Entity
 public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int Id_Reservation;
+    @Temporal(TemporalType.DATE)
     private LocalDateTime Debut_Reservation;
+    @Temporal(TemporalType.DATE)
     private LocalDateTime Fin_Reservation;
+
+    @OneToOne
     private Salle Salle;
+
+    @OneToOne
     private Utilisateur Utilisateur;
 
     public Reservation(int id, LocalDateTime debut, LocalDateTime fin, Salle salle, Utilisateur utilisateur) {

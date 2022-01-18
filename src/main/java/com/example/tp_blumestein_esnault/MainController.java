@@ -140,7 +140,7 @@ public class MainController {
         Reservation toAddReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
         //System.out.println(currentUtilisateur.getId_Utilisateur());
         //System.out.println(currentUtilisateur.getNom_Utilisateur());
-        reservations.addReservation(toAddReservation);
+        Model.reservations.addReservation(toAddReservation);
         Model.addReservation(toAddReservation);
     }
 
@@ -224,10 +224,10 @@ public class MainController {
         }
         Reservation toDelReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
         //looking in hashmap for the reservation to delete
-        for (int i = 1; i< reservations.getReservations().size(); i++ ){
-            if(reservations.getReservations().get(i)==toDelReservation){
-                reservations.getReservations().remove(i); //delete reservation in hashmap
-                Model.delreservation(toDelReservation); //delete reservation in database
+        for (int i = 1; i< Model.reservations.getReservations().size(); i++ ){
+            if(Model.reservations.getReservations().get(i)==toDelReservation){
+                Model.reservations.getReservations().remove(i); //delete reservation in hashmap
+                Model.delreservation(Model.reservations.getReservations().get(i)); //delete reservation in database
             }
         }
     }

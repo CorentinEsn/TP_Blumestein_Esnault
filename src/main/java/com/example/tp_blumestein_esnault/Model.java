@@ -11,7 +11,6 @@ public interface Model {
     Salles salles=new Salles();
     Utilisateurs utilisateurs=new Utilisateurs();
 
-
     //USER
 
     static void addUser(String nom, String prenom, String password) throws SQLException {
@@ -40,58 +39,7 @@ public interface Model {
 
     }
 
-    static Utilisateur getUser(int id) throws SQLException {
 
-
-        Statement s;
-        String query = "SELECT Nom,Prenom,Password FROM utilisateur WHERE idUtilisateur=?";
-
-
-        //create a statement
-        PreparedStatement pstmt = conn.prepareStatement(query);
-
-            pstmt.setInt(1, id);
-        Utilisateur u=null;
-            ResultSet rs = pstmt.executeQuery();
-            while(rs.next()) {
-                u = new Utilisateur(id, rs.getString("Nom"), rs.getString("Prenom"), rs.getString("Password"));
-            }
-        return u;
-    }
-
-    static void updateUser(int id, String nom, String prenom, String password) {
-
-        String query = "UPDATE utilisateur SET Nom=?,Prenom=?,Password=? WHERE idUtilisateur=(?)";
-        PreparedStatement pstmt;
-        try {
-            pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, nom);
-            pstmt.setString(2, prenom);
-            pstmt.setString(3,password);
-            pstmt.setInt(4, id);
-            pstmt.execute();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    static void delUser(int id) throws SQLException {
-
-        Statement s;
-        String query = "DELETE FROM utilisateur WHERE idUtilisateur=(?) ;";
-
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-        {
-
-            stmt.setInt(1, id);
-
-            stmt.execute();
-
-        }
-    }
 
     static void getAllUser() throws SQLException {
         Statement s;
@@ -134,22 +82,7 @@ public interface Model {
 
     }
 
-    static Salle getSalle(int id) throws SQLException {
 
-        String query = "SELECT Nom_Salle FROM salle WHERE idSalle=?";
-
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        stmt.setInt(1, id);
-        Salle salle=null;
-        ResultSet rs = stmt.executeQuery();
-        while(rs.next()) {
-             salle = new Salle(id, rs.getString("Nom_Salle"));
-        }
-return salle;
-    }
 
     static void getAllSalle() throws SQLException {
 
@@ -166,37 +99,6 @@ return salle;
             salles.addSalle(salle);
         }
 
-    }
-
-    static void updateSalle(Salle salle) {
-
-        String query = "UPDATE salle SET Nom_Salle=? WHERE idSaller=(?)";
-        PreparedStatement pstmt;
-        try {
-            pstmt = conn.prepareStatement(query);
-            pstmt.setString(1, salle.getNom_Salle());
-            pstmt.setInt(2, salle.getId_Salle());
-            pstmt.execute();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    static void delSalle(Salle salle) throws SQLException {
-
-        String query = "DELETE FROM salle WHERE idSalle=(?) ;";
-
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-        {
-
-            stmt.setInt(1, salle.getId_Salle());
-
-            stmt.execute();
-
-        }
     }
 
 
@@ -231,57 +133,6 @@ return salle;
 
     }
 
-    static Reservation getReservationByID(int id) throws SQLException {
-
-        String query = "SELECT * FROM reservation WHERE idReservation=?";
-
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        stmt.setInt(1, id);
-        Reservation reservation=null;
-        ResultSet rs = stmt.executeQuery();
-        while(rs.next()) {
-            reservation= new Reservation(id, rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
-        }
-return reservation;
-    }
-
-    static Reservations getReservationByUser(Utilisateur utilisateur) throws SQLException {
-
-        String query = "SELECT * FROM reservation WHERE Id_Utilisateur=?";
-
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        stmt.setInt(1, utilisateur.getId_Utilisateur());
-        Reservations reservations=new Reservations();
-        ResultSet rs = stmt.executeQuery();
-        while(rs.next()) {
-            reservations.addReservation(new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(),salles.getSalles().get(rs.getInt("Id_Utilisateur")),utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur"))));
-        }
-return reservations;
-    }
-
-    static Reservation getReservationBySalle(Salle salle) throws SQLException {
-
-        String query = "SELECT * FROM reservation WHERE id_Salle=?";
-
-
-        //create a statement
-        PreparedStatement stmt = conn.prepareStatement(query);
-
-        stmt.setInt(1, salle.getId_Salle());
-        Reservation reservation=null;
-        ResultSet rs = stmt.executeQuery();
-        while (rs.next()) {
-            reservation = new Reservation(rs.getInt("idReservation"), rs.getTimestamp("Debut_Reservation").toLocalDateTime(), rs.getTimestamp("Fin_Reservation").toLocalDateTime(), salles.getSalles().get(rs.getInt("Id_Utilisateur")), utilisateurs.getUtilisateurs().get(rs.getInt("Id_Utilisateur")));
-        }
-        return reservation;
-    }
-
 
     static void getAllReservation() throws SQLException {
 
@@ -297,23 +148,6 @@ return reservations;
             reservations.addReservation(reservation);
         }
 
-    }
-
-    static void updateReservation(Reservation reservation) {
-
-        String query = "UPDATE reservation SET Debut_Reservation=?,Fin_Reservation=?,Id_Salle=? WHERE idReservation=(?)";
-        PreparedStatement pstmt;
-        try {
-            pstmt = conn.prepareStatement(query);
-            pstmt.setTimestamp(1,Timestamp.valueOf(reservation.getDebut_Reservation()));
-            pstmt.setTimestamp(2, Timestamp.valueOf(reservation.getFin_Reservation()));
-            pstmt.setInt(3,reservation.getSalle().getId_Salle());
-            pstmt.setInt(4, reservation.getId_Reservation());
-            pstmt.execute();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
     static void delreservation(Reservation reservation) throws SQLException {

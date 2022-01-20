@@ -11,7 +11,7 @@ public class ConnectBdd {
 
     public static void initConnection() {
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("hibernate");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("test");
         em = emf.createEntityManager();
 
     }

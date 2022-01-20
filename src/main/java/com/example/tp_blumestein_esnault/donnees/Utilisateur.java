@@ -10,7 +10,6 @@ public class Utilisateur {
     private static Utilisateur utilisateurInstance = new Utilisateur();
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private int Id_Utilisateur;
     private String Nom_Utilisateur;
     private String Prenom_Utilisateur;

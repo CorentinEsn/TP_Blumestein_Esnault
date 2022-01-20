@@ -11,17 +11,15 @@ public class Reservation {
     private static Reservation reservationInstance = new Reservation();
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private int Id_Reservation;
-    @Temporal(TemporalType.DATE)
     private LocalDateTime Debut_Reservation;
-    @Temporal(TemporalType.DATE)
     private LocalDateTime Fin_Reservation;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Salle Salle;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Utilisateur Utilisateur;
 
     public Reservation(int id, LocalDateTime debut, LocalDateTime fin, Salle salle, Utilisateur utilisateur) {

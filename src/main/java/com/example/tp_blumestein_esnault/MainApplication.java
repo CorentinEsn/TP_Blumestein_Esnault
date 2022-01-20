@@ -48,7 +48,7 @@ public class MainApplication extends Application {
         Bdd.closeConnection();
     }
     public static void initialize() throws Exception {
-        Reservation.initialize();
+        //Reservation.initialize();
         Salle.initialize();
         Utilisateur.initialize();
     }

@@ -13,7 +13,6 @@ public class Salle {
 
 
     @Id
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private int Id_Salle;
     private String Nom_Salle;
 

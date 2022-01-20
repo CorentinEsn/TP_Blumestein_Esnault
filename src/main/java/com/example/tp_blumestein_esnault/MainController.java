@@ -51,7 +51,7 @@ public class MainController {
     private LocalDate currentJour=LocalDate.now();
     private LocalTime currentHeureDebut=LocalTime.now();
     private LocalTime currentHeureFin=LocalTime.now();
-    private LocalDateTime refCurrentDateTime = currentDebut_Reservation;
+    private final LocalDateTime refCurrentDateTime = currentDebut_Reservation;
 
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
@@ -81,7 +81,7 @@ public class MainController {
                 salleButton.setText(event.getTarget().toString());
                 setCurSalle(event);
             }
-        });;
+        });
     }
 
     public void deleteSalle() throws IOException {
@@ -176,7 +176,6 @@ public class MainController {
                 if (currentJour != null) {
                     setText();
                 }
-                ;
                 heureButton.setText("8h15-10h15");
             }
             case 2 -> {
@@ -187,7 +186,6 @@ public class MainController {
                 if (currentJour != null) {
                     setText();
                 }
-                ;
             }
             case 3 -> {
                 currentHeureDebut = LocalTime.of(14, 0);
@@ -197,7 +195,6 @@ public class MainController {
                 if (currentJour != null) {
                     setText();
                 }
-                ;
             }
             case 4 -> {
                 currentHeureDebut = LocalTime.of(16, 15);
@@ -207,7 +204,6 @@ public class MainController {
                 if (currentJour != null) {
                     setText();
                 }
-                ;
             }
         }
     }

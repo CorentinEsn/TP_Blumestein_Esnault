@@ -23,9 +23,14 @@ public class MainApplication extends Application {
         MainController mainController = fxmlLoader.getController();
         stage.setTitle("Reservation de salles");
 
-        Model.getAllUser();
-        Model.getAllSalle();
-        Model.getAllReservation();
+        DAO<Utilisateur> userDao = new DAO<Utilisateur>(Utilisateur.class);
+        DAO<Salle> salleDao = new DAO<Salle>(Salle.class);
+        DAO<Reservation> reservationDao = new DAO<Reservation>(Reservation.class);
+
+
+        userDao.getAll();
+        salleDao.getAll();
+        reservationDao.getAll();
         //initialization of Salle selections and TextFlow
         mainController.initializeSalles();
         mainController.initializeText();

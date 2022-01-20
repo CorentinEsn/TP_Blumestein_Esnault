@@ -55,8 +55,10 @@ public class MainController {
 
     private Salle currentSalle;
     private Utilisateur currentUtilisateur;
-    public Salles salles=Model.salles;
-    public Reservations reservations;
+
+    DAO<Utilisateur> userDao = new DAO<Utilisateur>(Utilisateur.class);
+    DAO<Salle> salleDao = new DAO<Salle>(Salle.class);
+    DAO<Reservation> reservationDao = new DAO<Reservation>(Reservation.class);
 
     @FXML
     public void login() throws IOException {
@@ -72,7 +74,8 @@ public class MainController {
 
     public void addSalleSelection(String salleName) throws SQLException {
         MenuButton salleButton = new MenuButton();
-        Model.addSalle(new Salle(salleName));
+        salleDao.persist(new Salle(salleName));
+
         MenuItem newSalle = new MenuItem(salleName);
         salleButton.getItems().addAll(newSalle);
         newSalle.setOnAction(new EventHandler<ActionEvent>() {
@@ -90,20 +93,21 @@ public class MainController {
 
     public void initializeText() {
         textZone.getChildren().add(new Text("Ici apparaîssent les réservations\n"));
-        for (int i=1;i<Model.reservations.getReservations().size()+1;i++){
-            textZone.getChildren().add(new Text("Salle : "+Model.reservations.getReservations().get(i).getSalle().getNom_Salle()+
-                    "\n Heure de début : "+Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                    +"\n Heure de fin : "+Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                    +"\n Réservée par : "+Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur()+" "
-                    +Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur()+"\n\n"));
+        for (int i=1;i<reservationDao.getAll().size()+1;i++){
+
+            textZone.getChildren().add(new Text("Salle : "+reservationDao.get(i).getSalle().getNom_Salle()+
+                    "\n Heure de début : "+reservationDao.get(i).getDebut_Reservation().toString()
+                    +"\n Heure de fin : "+reservationDao.get(i).getFin_Reservation().toString()
+                    +"\n Réservée par : "+reservationDao.get(i).getUtilisateur().getNom_Utilisateur()+" "
+                    +reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur()+"\n\n"));
         }
     }
 
     public void initializeSalles() throws SQLException {
         //initialize salle selection button
         int i;
-        for (i=1; i< salles.getSalles().size()+1;i++){
-            sallesItems.add(new MenuItem(salles.getSalles().get(i).getNom_Salle()));
+        for (i=1; i< salleDao.getAll().size()+1;i++){
+            sallesItems.add(new MenuItem(salleDao.get(i).getNom_Salle()));
             salleButton.getItems().add(sallesItems.get(i-1));
             int finalI = i;
             sallesItems.get(i-1).setOnAction(new EventHandler<ActionEvent>() {
@@ -117,9 +121,9 @@ public class MainController {
     }
 
     public void setCurSalle(ActionEvent actionEvent) {
-        for (int i=1; i < salles.getSalles().size()+1;i++){ //go through the hashmap
-            if(salles.getSalles().get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
-                currentSalle = salles.getSalles().get(i);
+        for (int i=1; i < salleDao.getAll().size()+1;i++){ //go through the hashmap
+            if(salleDao.get(i).getNom_Salle() == salleButton.getText()){ //hashmap value text match button text
+                currentSalle = salleDao.get(i);
 
                 //textZone.getChildren().add(new Text("Salle sélectionnée :" + currentSalle.getNom_Salle()+"\n"));
                 setText();
@@ -132,16 +136,15 @@ public class MainController {
         //System.out.println(currentHeureDebut);
         currentDebut_Reservation=LocalDateTime.of(currentJour, currentHeureDebut);
         currentFin_Reservation=LocalDateTime.of(currentJour, currentHeureFin);
-        for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++){
-            if (Model.utilisateurs.getUtilisateurs().get(i).isCurrent()){
-                currentUtilisateur=Model.utilisateurs.getUtilisateurs().get(i);
+        for (int i=1;i<userDao.getAll().size()+1;i++){
+            if (userDao.get(i).isCurrent()){
+                currentUtilisateur=userDao.get(i);
             }
         }
         Reservation toAddReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
         //System.out.println(currentUtilisateur.getId_Utilisateur());
         //System.out.println(currentUtilisateur.getNom_Utilisateur());
-        Model.reservations.addReservation(toAddReservation);
-        Model.addReservation(toAddReservation);
+        reservationDao.persist(toAddReservation);
     }
 
     public void selectUserReservations(ActionEvent actionEvent) throws SQLException {
@@ -213,17 +216,16 @@ public class MainController {
         currentJour = datePicker.getValue();
         currentDebut_Reservation=LocalDateTime.of(currentJour, currentHeureDebut);
         currentFin_Reservation=LocalDateTime.of(currentJour, currentHeureFin);
-        for (int i=1;i<Model.utilisateurs.getUtilisateurs().size()+1;i++){
-            if (Model.utilisateurs.getUtilisateurs().get(i).isCurrent()){
-                currentUtilisateur=Model.utilisateurs.getUtilisateurs().get(i);
+        for (int i=1;i<userDao.getAll().size()+1;i++){
+            if (userDao.get(i).isCurrent()){
+                currentUtilisateur=userDao.get(i);
             }
         }
         Reservation toDelReservation = new Reservation(currentDebut_Reservation, currentFin_Reservation, currentSalle, currentUtilisateur);
         //looking in hashmap for the reservation to delete
-        for (int i = 1; i< Model.reservations.getReservations().size(); i++ ){
-            if(Model.reservations.getReservations().get(i)==toDelReservation){
-                Model.reservations.getReservations().remove(i); //delete reservation in hashmap
-                Model.delreservation(Model.reservations.getReservations().get(i)); //delete reservation in database
+        for (int i = 1; i< reservationDao.getAll().size(); i++ ){
+            if(reservationDao.get(i)==toDelReservation){
+                reservationDao.delete(reservationDao.get(i)); //delete reservation in database
             }
         }
     }
@@ -264,13 +266,13 @@ public class MainController {
         switch (c){
             case 1 :
                 //par salle
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getSalle() == currentSalle) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }
@@ -278,26 +280,26 @@ public class MainController {
 
             case 2 :
                 //par date
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut)) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut)) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }
                 break;
             case 3 :
                 //par utilisateur
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }
@@ -305,13 +307,13 @@ public class MainController {
 
             case 4 :
                 //par salle et date
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle && Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut)) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getSalle() == currentSalle && reservationDao.get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut)) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }
@@ -319,13 +321,13 @@ public class MainController {
 
             case 5 :
                 //par salle et utilisateur
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle && Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getSalle() == currentSalle && reservationDao.get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }
@@ -333,13 +335,13 @@ public class MainController {
 
             case 6 :
                 //par date et utilisateur
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut) && Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut) && reservationDao.get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }
@@ -347,13 +349,13 @@ public class MainController {
 
             case 7 :
                 //par salle et date et utilisateur
-                for (int i=1;i<Model.reservations.getReservations().size()+1;i++) {
-                    if (Model.reservations.getReservations().get(i).getSalle() == currentSalle && Model.reservations.getReservations().get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut) && Model.reservations.getReservations().get(i).getUtilisateur() == currentUtilisateur) {
-                        textZone.getChildren().add(new Text("Salle : " + Model.reservations.getReservations().get(i).getSalle().getNom_Salle() +
-                                "\n Heure de début : " + Model.reservations.getReservations().get(i).getDebut_Reservation().toString()
-                                + "\n Heure de fin : " + Model.reservations.getReservations().get(i).getFin_Reservation().toString()
-                                + "\n Réservée par : " + Model.reservations.getReservations().get(i).getUtilisateur().getNom_Utilisateur() + " "
-                                + Model.reservations.getReservations().get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
+                for (int i=1;i<reservationDao.getAll().size()+1;i++) {
+                    if (reservationDao.get(i).getSalle() == currentSalle && reservationDao.get(i).getDebut_Reservation() == LocalDateTime.of(currentJour, currentHeureDebut) && reservationDao.get(i).getUtilisateur() == currentUtilisateur) {
+                        textZone.getChildren().add(new Text("Salle : " + reservationDao.get(i).getSalle().getNom_Salle() +
+                                "\n Heure de début : " + reservationDao.get(i).getDebut_Reservation().toString()
+                                + "\n Heure de fin : " + reservationDao.get(i).getFin_Reservation().toString()
+                                + "\n Réservée par : " + reservationDao.get(i).getUtilisateur().getNom_Utilisateur() + " "
+                                + reservationDao.get(i).getUtilisateur().getPrenom_Utilisateur() + "\n\n"));
 
                     }
                 }

@@ -1,5 +1,8 @@
 package com.example.tp_blumestein_esnault;
 
+import com.example.tp_blumestein_esnault.donnees.Utilisateur;
+
+import java.sql.SQLException;
 import java.util.List;
 
 public class DAO<T> {
@@ -12,16 +15,16 @@ public class DAO<T> {
 
     public List<T> getAll() {
         String[] string = type.getName().split("\\.");
-        return ConnectBdd.getEntityManager().createQuery("SELECT t FROM " + string[string.length-1] + " t", type).getResultList();
+        return ConnectBdd.getEntityManager().createQuery("SELECT t FROM " + string[string.length - 1] + " t", type).getResultList();
     }
 
     public T get(int id) {
         return ConnectBdd.getEntityManager().find(type, id);
     }
 
-    public Object getColumn(int id, String column){
+    public Object getColumn(int id, String column) {
         String[] string = type.getName().split("\\.");
-        return ConnectBdd.getEntityManager().createQuery("SELECT " + column + " FROM " + string[string.length-1] + " WHERE id =" + id).getSingleResult();
+        return ConnectBdd.getEntityManager().createQuery("SELECT " + column + " FROM " + string[string.length - 1] + " WHERE id =" + id).getSingleResult();
     }
 
     public void persist(T t) {
@@ -41,5 +44,4 @@ public class DAO<T> {
         ConnectBdd.getEntityManager().remove(t);
         ConnectBdd.commitTransaction();
     }
-
 }
